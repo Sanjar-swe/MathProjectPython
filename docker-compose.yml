@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=ustudy_db
+      - POSTGRES_USER=ustudy_user
+      - POSTGRES_PASSWORD=ustudy_password
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: /bin/sh -c "uv run python manage.py migrate && uv run python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://ustudy_user:ustudy_password@db:5432/ustudy_db
+      - BOT_TOKEN=${BOT_TOKEN}
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=True
+    depends_on:
+      - db
+
+  bot:
+    build: .
+    command: uv run python -m apps.bot.main
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgres://ustudy_user:ustudy_password@db:5432/ustudy_db
+      - BOT_TOKEN=${BOT_TOKEN}
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      - db
+      - web # Wait for migrations
+
+volumes:
+  postgres_data:
