@@ -123,37 +123,76 @@ export default function App() {
                     <StatCard title="Топ результат" value={stats.top_users.length > 0 ? `${stats.top_users[0].score}/10` : '-'} />
                 </div>
                 
-                <div>
-                     <h2 className="text-xl font-semibold mb-4">Топ-10 Учеников</h2>
-                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <table className="w-full text-left">
-                            <thead className="bg-gray-50 border-b border-gray-100">
-                                <tr>
-                                    <th className="p-4 font-semibold text-gray-600">Имя</th>
-                                    <th className="p-4 font-semibold text-gray-600">Результат</th>
-                                    <th className="p-4 font-semibold text-gray-600">Дата</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {stats.top_users.map((attempt) => (
-                                    <tr key={attempt.id} className="border-b border-gray-50 hover:bg-gray-50">
-                                        <td className="p-4 font-medium">{attempt.user_name}</td>
-                                        <td className="p-4">
-                                            <span className="bg-green-100 text-green-700 px-2 py-1 rounded-lg text-sm font-bold">
-                                                {attempt.score}/{attempt.total_questions}
-                                            </span>
-                                        </td>
-                                        <td className="p-4 text-gray-500 text-sm">
-                                            {new Date(attempt.created_at).toLocaleDateString()}
-                                        </td>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Top Users Table */}
+                    <div>
+                         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                             <Users className="text-blue-500" size={20} />
+                             Топ-10 Учеников
+                         </h2>
+                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                            <table className="w-full text-left">
+                                <thead className="bg-gray-50 border-b border-gray-100">
+                                    <tr>
+                                        <th className="p-4 font-semibold text-gray-600">Имя</th>
+                                        <th className="p-4 font-semibold text-gray-600">Результат</th>
+                                        <th className="p-4 font-semibold text-gray-600">Дата</th>
                                     </tr>
-                                ))}
-                                {stats.top_users.length === 0 && (
-                                    <tr><td colSpan="3" className="p-8 text-center text-gray-400">Нет данных</td></tr>
-                                )}
-                            </tbody>
-                        </table>
-                     </div>
+                                </thead>
+                                <tbody>
+                                    {stats.top_users.map((attempt) => (
+                                        <tr key={attempt.id} className="border-b border-gray-50 hover:bg-gray-50">
+                                            <td className="p-4 font-medium">{attempt.user_name}</td>
+                                            <td className="p-4">
+                                                <span className="bg-green-100 text-green-700 px-2 py-1 rounded-lg text-sm font-bold">
+                                                    {attempt.score}/{attempt.total_questions}
+                                                </span>
+                                            </td>
+                                            <td className="p-4 text-gray-500 text-sm">
+                                                {new Date(attempt.created_at).toLocaleDateString()}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {stats.top_users.length === 0 && (
+                                        <tr><td colSpan="3" className="p-8 text-center text-gray-400">Нет данных</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                         </div>
+                    </div>
+
+                    {/* Difficult Questions Table */}
+                    <div>
+                         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                             <AlertCircle className="text-red-500" size={20} />
+                             Топ Сложных Вопросов
+                         </h2>
+                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                            <table className="w-full text-left">
+                                <thead className="bg-gray-50 border-b border-gray-100">
+                                    <tr>
+                                        <th className="p-4 font-semibold text-gray-600">Вопрос</th>
+                                        <th className="p-4 font-semibold text-gray-600 text-right">Ошибок</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {(stats.difficult_questions || []).map((q) => (
+                                        <tr key={q.id} className="border-b border-gray-50 hover:bg-gray-50">
+                                            <td className="p-4 text-sm text-gray-700">{q.text}</td>
+                                            <td className="p-4 text-right">
+                                                <span className="bg-red-100 text-red-700 px-2 py-1 rounded-lg text-sm font-bold">
+                                                    {q.incorrect_count}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {(!stats.difficult_questions || stats.difficult_questions.length === 0) && (
+                                        <tr><td colSpan="2" className="p-8 text-center text-gray-400">Нет данных об ошибках</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                         </div>
+                    </div>
                 </div>
             </div>
         )}
