@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from apps.models import Question, BotUser, TestAttempt
 from apps.serializers import QuestionSerializer, BotUserSerializer, TestAttemptSerializer
+from django.db.models import Count, Q
 import openpyxl
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -52,8 +53,22 @@ class TestAttemptViewSet(viewsets.ReadOnlyModelViewSet):
         total_attempts = TestAttempt.objects.count()
         top_users = TestAttempt.objects.order_by('-score')[:10]
         
+        # Difficult questions: most incorrect answers (where attemptdetail__is_correct=False)
+        difficult_questions = Question.objects.annotate(
+            incorrect_count=Count('attemptdetail', filter=Q(attemptdetail__is_correct=False))
+        ).filter(incorrect_count__gt=0).order_by('-incorrect_count')[:5]
+        
+        difficult_data = [
+            {
+                "id": q.id,
+                "text": q.text[:50],
+                "incorrect_count": q.incorrect_count
+            } for q in difficult_questions
+        ]
+        
         return Response({
             "total_users": total_users,
             "total_attempts": total_attempts,
-            "top_users": TestAttemptSerializer(top_users, many=True).data
+            "top_users": TestAttemptSerializer(top_users, many=True).data,
+            "difficult_questions": difficult_data
         })
