@@ -88,13 +88,13 @@ export default function App() {
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
-          <SidebarItem icon={<LayoutDashboard />} label="Дашборд" active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} />
-          <SidebarItem icon={<FileSpreadsheet />} label="Вопросы" active={activeTab === 'questions'} onClick={() => setActiveTab('questions')} />
-          <SidebarItem icon={<Users />} label="Ученики" active={activeTab === 'students'} onClick={() => setActiveTab('students')} />
+          <SidebarItem icon={<LayoutDashboard />} label="Statistika" active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} />
+          <SidebarItem icon={<FileSpreadsheet />} label="Sorawlar" active={activeTab === 'questions'} onClick={() => setActiveTab('questions')} />
+          <SidebarItem icon={<Users />} label="Oqiwshilar" active={activeTab === 'students'} onClick={() => setActiveTab('students')} />
         </nav>
         
         <div className="p-4 border-t border-gray-100">
-           <div className="text-xs text-gray-400">Версия 1.0.1</div>
+           <div className="text-xs text-gray-400">Versiya 1.0.1</div>
         </div>
       </aside>
 
@@ -103,11 +103,11 @@ export default function App() {
         <header className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-                {activeTab === 'dashboard' && 'Обзор статистики'}
-                {activeTab === 'questions' && 'Управление вопросами'}
-                {activeTab === 'students' && 'Список учеников'}
+                {activeTab === 'dashboard' && 'Statistika obzori'}
+                {activeTab === 'questions' && 'Sorawlar basqariwi'}
+                {activeTab === 'students' && 'Oqiwshilar dizimi'}
             </h1>
-            <p className="text-gray-500 mt-2">Добро пожаловать в панель управления учителя.</p>
+            <p className="text-gray-500 mt-2">Mugalimler basqariw paneline xosh keldıńiz.</p>
           </div>
           <button onClick={() => activeTab === 'students' ? fetchStudents() : fetchStats()} className="p-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all text-gray-500 hover:text-blue-600">
             <RefreshCw size={20} />
@@ -117,10 +117,10 @@ export default function App() {
         {activeTab === 'dashboard' && (
             <div className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <StatCard title="Всего учеников" value={stats.total_users} />
-                    <StatCard title="Всего попыток" value={stats.total_attempts} />
+                    <StatCard title="Oqiwshilar sani" value={stats.total_users} />
+                    <StatCard title="Uliuma tapsiriwlar" value={stats.total_attempts} />
                     {/* Simplified average for now, ideally calc on backend */}
-                    <StatCard title="Топ результат" value={stats.top_users.length > 0 ? `${stats.top_users[0].score}/10` : '-'} />
+                    <StatCard title="Top natiyje" value={stats.top_users.length > 0 ? `${stats.top_users[0].score}/10` : '-'} />
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -128,15 +128,15 @@ export default function App() {
                     <div>
                          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                              <Users className="text-blue-500" size={20} />
-                             Топ-10 Учеников
+                             Top-10 Oqiwshilar
                          </h2>
                          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                             <table className="w-full text-left">
                                 <thead className="bg-gray-50 border-b border-gray-100">
                                     <tr>
-                                        <th className="p-4 font-semibold text-gray-600">Имя</th>
-                                        <th className="p-4 font-semibold text-gray-600">Результат</th>
-                                        <th className="p-4 font-semibold text-gray-600">Дата</th>
+                                        <th className="p-4 font-semibold text-gray-600">Ati</th>
+                                        <th className="p-4 font-semibold text-gray-600">Natiyje</th>
+                                        <th className="p-4 font-semibold text-gray-600">Sane</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -154,7 +154,7 @@ export default function App() {
                                         </tr>
                                     ))}
                                     {stats.top_users.length === 0 && (
-                                        <tr><td colSpan="3" className="p-8 text-center text-gray-400">Нет данных</td></tr>
+                                        <tr><td colSpan="3" className="p-8 text-center text-gray-400">Maǵliwmat joq</td></tr>
                                     )}
                                 </tbody>
                             </table>
@@ -165,14 +165,14 @@ export default function App() {
                     <div>
                          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                              <AlertCircle className="text-red-500" size={20} />
-                             Топ Сложных Вопросов
+                             Eń qiyin sorawlar
                          </h2>
                          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                             <table className="w-full text-left">
                                 <thead className="bg-gray-50 border-b border-gray-100">
                                     <tr>
-                                        <th className="p-4 font-semibold text-gray-600">Вопрос</th>
-                                        <th className="p-4 font-semibold text-gray-600 text-right">Ошибок</th>
+                                        <th className="p-4 font-semibold text-gray-600">Soraw</th>
+                                        <th className="p-4 font-semibold text-gray-600 text-right">Qateler</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,7 +187,7 @@ export default function App() {
                                         </tr>
                                     ))}
                                     {(!stats.difficult_questions || stats.difficult_questions.length === 0) && (
-                                        <tr><td colSpan="2" className="p-8 text-center text-gray-400">Нет данных об ошибках</td></tr>
+                                        <tr><td colSpan="2" className="p-8 text-center text-gray-400">Qateler boyinsha maǵliwmat joq</td></tr>
                                     )}
                                 </tbody>
                             </table>
@@ -204,25 +204,25 @@ export default function App() {
                 <Upload className="w-12 h-12 text-blue-600" />
               </div>
             </div>
-            <h2 className="text-xl font-semibold mb-2">Загрузить вопросы из Excel</h2>
-            <p className="text-gray-500 mb-8">Перетащите файл сюда или нажмите кнопку для выбора.</p>
+            <h2 className="text-xl font-semibold mb-2">Excel-den sorawlar júklew</h2>
+            <p className="text-gray-500 mb-8">Fayldi bul jerge taslań yamasa tańlaw ushin túymeni basiń.</p>
             
             <label className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium cursor-pointer transition-all active:scale-95">
-              <span>Выбрать файл (.xlsx)</span>
+              <span>Fayldi tańlań (.xlsx)</span>
               <input type="file" className="hidden" accept=".xlsx" onChange={handleFileUpload} />
             </label>
 
-            {uploadStatus === 'uploading' && <p className="mt-4 text-blue-600 animate-pulse">Загрузка...</p>}
+            {uploadStatus === 'uploading' && <p className="mt-4 text-blue-600 animate-pulse">Júklenbekte...</p>}
             {uploadStatus === 'success' && (
               <div className="mt-4 flex items-center justify-center gap-2 text-green-600">
                 <CheckCircle className="w-5 h-5" />
-                <span>Вопросы успешно добавлены!</span>
+                <span>Sorawlar tabisli qosildi!</span>
               </div>
             )}
             {uploadStatus === 'error' && (
               <div className="mt-4 flex items-center justify-center gap-2 text-red-600">
                 <AlertCircle className="w-5 h-5" />
-                <span>Ошибка загрузки. Проверьте формат файла.</span>
+                <span>Júklewde qate. Fayl formatin tekseriń.</span>
               </div>
             )}
           </div>
@@ -231,16 +231,16 @@ export default function App() {
         {activeTab === 'students' && (
              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                    <h3 className="font-semibold text-gray-700">Все зарегистрированные ученики</h3>
-                    <span className="text-sm text-gray-500">Всего: {students.length}</span>
+                    <h3 className="font-semibold text-gray-700">Barlik dizimnen ótken oqiwshilar</h3>
+                    <span className="text-sm text-gray-500">Uliuma: {students.length}</span>
                 </div>
                 <table className="w-full text-left">
                     <thead>
                         <tr className="border-b border-gray-100 text-sm uppercasetracking-wider text-gray-500">
                             <th className="p-4 font-semibold">ID (Telegram)</th>
-                            <th className="p-4 font-semibold">ФИО</th>
+                            <th className="p-4 font-semibold">Ati-jóni</th>
                             <th className="p-4 font-semibold">Username</th>
-                            <th className="p-4 font-semibold">Дата регистрации</th>
+                            <th className="p-4 font-semibold">Registraciya sanesi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -255,11 +255,11 @@ export default function App() {
                             </tr>
                         ))}
                          {students.length === 0 && !loading && (
-                            <tr><td colSpan="4" className="p-8 text-center text-gray-400">Список пуст</td></tr>
+                            <tr><td colSpan="4" className="p-8 text-center text-gray-400">Dizim bos</td></tr>
                         )}
                     </tbody>
                 </table>
-                 {loading && <div className="p-8 text-center text-blue-500">Загрузка...</div>}
+                 {loading && <div className="p-8 text-center text-blue-500">Júklenbekte...</div>}
              </div>
         )}
 
